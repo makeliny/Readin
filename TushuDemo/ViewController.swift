@@ -177,9 +177,7 @@ class ViewController: UIViewController {
 //       //如果要使用数据，先实例化
 //    }
 
-    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + <#delayTime#>) {
-    <#code#>
-    }
+    
 }
 
 

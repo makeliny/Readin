@@ -20,7 +20,7 @@
 		64619F30FC7732A1DE7E2964 /* Pods-TushuDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TushuDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-TushuDemo/Pods-TushuDemo.release.xcconfig"; sourceTree = "<group>"; };
 		678DC97E3B5A9DF335E79EF9 /* Pods-TushuDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TushuDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TushuDemo/Pods-TushuDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		6B8CFCBE21D1F2340068D12F /* BookInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookInfo.swift; sourceTree = "<group>"; };
-		6B8CFCC021D316240068D12F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		6B8CFCC121D321590068D12F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		6BDDA9BF21D1BAC400CA9819 /* TushuDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TushuDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BDDA9C221D1BAC400CA9819 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6BDDA9C421D1BAC400CA9819 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -66,8 +66,8 @@
 			children = (
 				6BDDA9C221D1BAC400CA9819 /* AppDelegate.swift */,
 				6BDDA9C421D1BAC400CA9819 /* ViewController.swift */,
-				6B8CFCC021D316240068D12F /* README.md */,
 				6BDDA9C621D1BAC400CA9819 /* Main.storyboard */,
+				6B8CFCC121D321590068D12F /* README.md */,
 				6B8CFCBE21D1F2340068D12F /* BookInfo.swift */,
 				6BDDA9C921D1BAC500CA9819 /* Assets.xcassets */,
 				6BDDA9CB21D1BAC500CA9819 /* LaunchScreen.storyboard */,
