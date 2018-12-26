@@ -1,0 +1,6 @@
+framework module Pods_TushuDemo {
+  umbrella header "Pods-TushuDemo-umbrella.h"
+
+  export *
+  module * { export * }
+}
