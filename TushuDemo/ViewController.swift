@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
-
+import Chrysan
 class ViewController: UIViewController {
     var bookinfo = BookInfo()
     var booke = ""
@@ -30,10 +30,11 @@ class ViewController: UIViewController {
                 print("成功获取到数据")
                 let book1 : JSON = JSON(response.result.value!)
                 if book1["msg"] == "book_not_found"{
-                    let alrt = UIAlertController(title: "错误❌", message: "找不到此ISBN编号的书籍，请核对后再试", preferredStyle:.alert)
-                    let action = UIAlertAction(title: "确定", style: .cancel, handler: nil)
-                    alrt.addAction(action)
-                    self.present(alrt,animated: true,completion: nil)
+                    self.chrysan.show(.error, message: "找不到此ISBN编号的书籍，请核对后再试", hideDelay: 2)
+//                    let alrt = UIAlertController(title: "错误❌", message: "找不到此ISBN编号的书籍，请核对后再试", preferredStyle:.alert)
+//                    let action = UIAlertAction(title: "确定", style: .cancel, handler: nil)
+//                    alrt.addAction(action)
+//                    self.present(alrt,animated: true,completion: nil)
                 } else {
                     self.booklist(book: book1)
                     print(self.bookinfo.title!)
