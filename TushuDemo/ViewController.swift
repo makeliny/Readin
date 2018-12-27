@@ -10,12 +10,18 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import Chrysan
-class ViewController: UIViewController {
+import Kingfisher
+class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+    
+    
+    
+    @IBOutlet weak var tableView: UITableView!
     var bookinfo = BookInfo()
     var booke = ""
     override func viewDidLoad() {
         bookdic()
-        let isbn = "https://api.douban.com/v2/book/isbn/978754115173"
+        
+        let isbn = "9787550295070"
         booksearch(isbn: isbn)
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -24,7 +30,7 @@ class ViewController: UIViewController {
     func booksearch(isbn:String){
         //输入isbn,想豆瓣服务器查询，先确isbn是否正确，如果错误就弹出提示框，正确就把返回的JSON存储到字典里。
         //等下次用户再查询isbn，把原来存储的书籍标题拿出来，检查返回的标题是否在已经存储的字典里，如果在就弹提示框取消存储，如果不在就添加。
-        Alamofire.request("https://api.douban.com/v2/book/isbn/978754115173\(isbn)").responseJSON { (response) in
+        Alamofire.request("https://api.douban.com/v2/book/isbn/\(isbn)").responseJSON { (response) in
             
             if response.result.isSuccess {
                 print("成功获取到数据")
@@ -37,6 +43,7 @@ class ViewController: UIViewController {
 //                    self.present(alrt,animated: true,completion: nil)
                 } else {
                     self.booklist(book: book1)
+                    self.tableView.reloadData()
                     print(self.bookinfo.title!)
                 }
                 //                self.booklist(book: book1)
@@ -49,7 +56,22 @@ class ViewController: UIViewController {
         }
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return  (bookinfo.title?.count)!
+    }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! Cell
+        let imageurl = URL(string:bookinfo.image![indexPath.row])
+        cell.bookimage.kf.setImage(with: imageurl)
+        cell.bookname.text = bookinfo.title![indexPath.row]
+        print(imageurl)
+        return cell
+        
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath[1])
+    }
     
     
     
@@ -59,28 +81,94 @@ class ViewController: UIViewController {
         if bookinfo.title==nil {
             bookinfo.title = Array<String>()
         }
-        bookinfo.summary = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.image = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.page = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.isbn10 = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.isbn13 = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.publisher = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.imagesMedium = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.imagesSmall = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.imagesLarge = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.ratingNumRaters = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.ratingAverage = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.author = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.url = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.author_intro = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.binding = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.pubdate = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.catalog = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.alt_title = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.alt = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.origin_title = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.price = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
-        bookinfo.subtitle = UserDefaults.standard.value(forKey: "bookinfo.") as! Array<String>?
+        bookinfo.summary = UserDefaults.standard.value(forKey: "bookinfo.summary") as! Array<String>?
+        if bookinfo.summary == nil {
+            bookinfo.summary = Array<String>()
+        }
+        bookinfo.image = UserDefaults.standard.value(forKey: "bookinfo.image") as! Array<String>?
+        if bookinfo.image == nil {
+            bookinfo.image = Array<String>()
+        }
+        bookinfo.page = UserDefaults.standard.value(forKey: "bookinfo.image") as! Array<String>?
+        if bookinfo.page == nil {
+            bookinfo.page = Array<String>()
+        }
+        bookinfo.isbn10 = UserDefaults.standard.value(forKey: "bookinfo.isbn10") as! Array<String>?
+        if bookinfo.isbn10 == nil {
+            bookinfo.isbn10 = Array<String>()
+        }
+        bookinfo.isbn13 = UserDefaults.standard.value(forKey: "bookinfo.isbn13") as! Array<String>?
+        if bookinfo.isbn13 == nil {
+            bookinfo.isbn13 = Array<String>()
+        }
+        bookinfo.publisher = UserDefaults.standard.value(forKey: "bookinfo.publisher") as! Array<String>?
+        if bookinfo.publisher == nil {
+            bookinfo.publisher = Array<String>()
+        }
+        bookinfo.imagesMedium = UserDefaults.standard.value(forKey: "bookinfo.imagesMedium") as! Array<String>?
+        if bookinfo.imagesMedium == nil {
+            bookinfo.imagesMedium = Array<String>()
+        }
+        bookinfo.imagesSmall = UserDefaults.standard.value(forKey: "bookinfo.imagesSmall") as! Array<String>?
+        if bookinfo.imagesSmall == nil {
+            bookinfo.imagesSmall = Array<String>()
+        }
+        bookinfo.imagesLarge = UserDefaults.standard.value(forKey: "bookinfo.imagesLarge") as! Array<String>?
+        if bookinfo.imagesLarge == nil {
+            bookinfo.imagesLarge = Array<String>()
+        }
+        bookinfo.ratingNumRaters = UserDefaults.standard.value(forKey: "bookinfo.ratingNumRaters") as! Array<String>?
+        if bookinfo.ratingNumRaters == nil {
+            bookinfo.ratingNumRaters = Array<String>()
+        }
+        bookinfo.ratingAverage = UserDefaults.standard.value(forKey: "bookinfo.ratingAverage") as! Array<String>?
+        if bookinfo.ratingAverage == nil {
+            bookinfo.ratingAverage = Array<String>()
+        }
+        bookinfo.id = UserDefaults.standard.value(forKey: "bookinfo.author") as! Array<String>?
+        if bookinfo.id == nil {
+            bookinfo.id = Array<String>()
+        }
+        bookinfo.url = UserDefaults.standard.value(forKey: "bookinfo.url") as! Array<String>?
+        if bookinfo.url == nil {
+            bookinfo.url = Array<String>()
+        }
+        bookinfo.author_intro = UserDefaults.standard.value(forKey: "bookinfo.author_intro") as! Array<String>?
+        if bookinfo.author_intro == nil {
+            bookinfo.author_intro = Array<String>()
+        }
+        bookinfo.binding = UserDefaults.standard.value(forKey: "bookinfo.binding") as! Array<String>?
+        if bookinfo.binding == nil {
+            bookinfo.binding = Array<String>()
+        }
+        bookinfo.pubdate = UserDefaults.standard.value(forKey: "bookinfo.pubdate") as! Array<String>?
+        if bookinfo.pubdate == nil {
+            bookinfo.pubdate = Array<String>()
+        }
+        bookinfo.catalog = UserDefaults.standard.value(forKey: "bookinfo.catalog") as! Array<String>?
+        if bookinfo.catalog == nil {
+            bookinfo.catalog = Array<String>()
+        }
+        bookinfo.alt_title = UserDefaults.standard.value(forKey: "bookinfo.alt_title") as! Array<String>?
+        if bookinfo.alt_title == nil {
+            bookinfo.alt_title = Array<String>()
+        }
+        bookinfo.alt = UserDefaults.standard.value(forKey: "bookinfo.alt") as! Array<String>?
+        if bookinfo.alt == nil {
+            bookinfo.alt = Array<String>()
+        }
+        bookinfo.origin_title = UserDefaults.standard.value(forKey: "bookinfo.origin_title") as! Array<String>?
+        if bookinfo.origin_title == nil {
+            bookinfo.origin_title = Array<String>()
+        }
+        bookinfo.price = UserDefaults.standard.value(forKey: "bookinfo.price") as! Array<String>?
+        if bookinfo.price == nil {
+            bookinfo.price = Array<String>()
+        }
+        bookinfo.subtitle = UserDefaults.standard.value(forKey: "bookinfo.subtitle") as! Array<String>?
+        if bookinfo.subtitle == nil {
+            bookinfo.subtitle = Array<String>()
+        }
     }
     func booklist(book : JSON){
         bookdic()
@@ -93,18 +181,18 @@ class ViewController: UIViewController {
             bookinfo.catalog?.append(book["catalog"].string!)
             bookinfo.id?.append(book["id"].string!)
             bookinfo.image?.append(book["image"].string!)
-            bookinfo.imagesSmall?.append(book["imagesSmall"].string!)
-            bookinfo.imagesMedium?.append(book["imagesMedium"].string!)
-            bookinfo.imagesLarge?.append(book["imagesLarge"].string!)
+            bookinfo.imagesSmall?.append(book["images","small"].string!)
+            bookinfo.imagesMedium?.append(book["images","medium"].string!)
+            bookinfo.imagesLarge?.append(book["images","large"].string!)
             bookinfo.isbn10?.append(book["isbn10"].string!)
             bookinfo.isbn13?.append(book["isbn13"].string!)
             bookinfo.origin_title?.append(book["origin_title"].string!)
-            bookinfo.page?.append(book["page"].string!)
+            bookinfo.page?.append(book["pages"].string!)
             bookinfo.price?.append(book["price"].string!)
             bookinfo.pubdate?.append(book["pubdate"].string!)
             bookinfo.publisher?.append(book["publisher"].string!)
-            bookinfo.ratingAverage?.append(book["ratingAverage"].string!)
-            bookinfo.ratingNumRaters?.append(book["ratingNumRaters"].string!)
+            bookinfo.ratingAverage?.append(book["rating","average"].string!)
+            bookinfo.ratingNumRaters?.append("\(book["rating","numRaters"].int!)")
             bookinfo.subtitle?.append(book["subtitle"].string!)
             bookinfo.summary?.append(book["summary"].string!)
             bookinfo.title?.append(book["title"].string!)
@@ -143,40 +231,13 @@ class ViewController: UIViewController {
         }
         
     }
-//    func bookinfo(book : JSON){
-//         bookDic = UserDefaults.standard.value(forKey:"BookList") as! Dictionary<String,Array<String>>
-//
-//        if bookDic.keys.first == book["title"].string! {
-//            //把新加的book和原来存储的做比较
-//        }
-//        bookinfo.title = book["title"].string!
-//        bookinfo.summary = book["summary"].string!
-//        bookinfo.image = book["image"].string!
-//        bookinfo.page = book["page"].string!
-//        bookinfo.isbn10 = book["isbn10"].string!
-//        bookinfo.isbn13 = book["isbn13"].string!
-//        bookinfo.publisher = book["publisher"].string!
-//        bookinfo.imagesMedium = book["images"]["medium"].string!
-//        bookinfo.imagesSmall = book["images"]["small"].string!
-//        bookinfo.imagesLarge = book["images"]["large"].string!
-//        bookinfo.ratingNumRaters = book["rating"]["numRaters"].string!
-//        bookinfo.ratingAverage = book["rating"]["average"].string!
-//        bookinfo.author = book["author"].string!
-//        bookinfo.url = book["url"].string!
-//        bookinfo.author_intro = book["author_intro"].string!
-//        bookinfo.binding = book["binding"].string!
-//        bookinfo.pubdate = book["pubdate"].string!
-//        bookinfo.catalog = book["catalog"].string!
-//        bookinfo.alt_title = book["alt_title"].string!
-//        bookinfo.alt = book["alt"].string!
-//        bookinfo.origin_title = book["origin_title"].string!
-//        bookinfo.price = book["price"].string!
-//        bookinfo.subtitle = book["subtitle"].string!
-//        bookArray = [bookinfo.title,bookinfo.summary,bookinfo.image,bookinfo.page,bookinfo.isbn10,bookinfo.isbn13,bookinfo.publisher,bookinfo.imagesMedium,bookinfo.imagesSmall,bookinfo.imagesLarge,bookinfo.ratingNumRaters,bookinfo.ratingAverage,bookinfo.author,bookinfo.url,bookinfo.author_intro,bookinfo.binding,bookinfo.pubdate,bookinfo.catalog,bookinfo.alt_title,bookinfo.alt,bookinfo.origin_title,bookinfo.price,bookinfo.subtitle]
-//        bookDic.updateValue(bookArray, forKey: bookinfo.title)
-//        UserDefaults.standard.set(bookDic, forKey: "BookList")
-//       //如果要使用数据，先实例化
-//    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let row = tableView.indexPathForSelectedRow?.row
+        let bv = segue.destination as! bookview
+        bv.index = row!
+
+    }
+    
 
     
 }
