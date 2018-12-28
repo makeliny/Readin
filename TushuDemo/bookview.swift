@@ -13,21 +13,23 @@ import SwiftyJSON
 class bookview: UIViewController,UITextFieldDelegate {
     let bookinfo = BookInfo()
     var index = Int()
-    @IBOutlet weak var im: UIImageView!
+    
 
     @IBOutlet weak var bksumaiy: UITextView!
     @IBOutlet weak var bkimagel: UIImageView!
     @IBOutlet weak var bkname: UILabel!
-  
+    @IBOutlet weak var bkauthor: UILabel!
+    
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
     navigationItem.largeTitleDisplayMode = .never
         bookdic()
+        bkname.font = UIFont.systemFont(ofSize: 20, weight: .light)
         
 
-        im.kf.setImage(with: URL(string: bookinfo.imagesLarge![index]))
+        bkauthor.text = bookinfo.author![index]
         bkname.text = bookinfo.title![index]
         bkimagel.kf.setImage(with: URL(string: bookinfo.imagesMedium![index]))
         bksumaiy.text = bookinfo.summary![index]
@@ -84,9 +86,9 @@ class bookview: UIViewController,UITextFieldDelegate {
         if bookinfo.ratingAverage == nil {
             bookinfo.ratingAverage = Array<String>()
         }
-        bookinfo.id = UserDefaults.standard.value(forKey: "bookinfo.author") as! Array<String>?
-        if bookinfo.id == nil {
-            bookinfo.id = Array<String>()
+        bookinfo.author = UserDefaults.standard.value(forKey: "bookinfo.author") as! Array<String>?
+        if bookinfo.author == nil {
+            bookinfo.author = Array<String>()
         }
         bookinfo.url = UserDefaults.standard.value(forKey: "bookinfo.url") as! Array<String>?
         if bookinfo.url == nil {

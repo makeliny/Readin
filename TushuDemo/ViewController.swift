@@ -11,17 +11,18 @@ import Alamofire
 import SwiftyJSON
 import Chrysan
 import Kingfisher
-class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
     
     
-    
+    @IBOutlet weak var searchbar: UITextField!
+    var s1 = ""
     @IBOutlet weak var tableView: UITableView!
     var bookinfo = BookInfo()
     var booke = ""
     override func viewDidLoad() {
-        bookdic()
         
-        let isbn = "9787550295070"
+        bookdic()
+        let isbn = "9787301298862"
         booksearch(isbn: isbn)
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -37,14 +38,13 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 let book1 : JSON = JSON(response.result.value!)
                 if book1["msg"] == "book_not_found"{
                     self.chrysan.show(.error, message: "找不到此ISBN编号的书籍，请核对后再试", hideDelay: 2)
-//                    let alrt = UIAlertController(title: "错误❌", message: "找不到此ISBN编号的书籍，请核对后再试", preferredStyle:.alert)
-//                    let action = UIAlertAction(title: "确定", style: .cancel, handler: nil)
-//                    alrt.addAction(action)
-//                    self.present(alrt,animated: true,completion: nil)
                 } else {
                     self.booklist(book: book1)
                     self.tableView.reloadData()
-                    print(self.bookinfo.title!)
+                    
+                    print(self.s1)
+                    //print("\(book1["author"].rawValue)")
+
                 }
                 //                self.booklist(book: book1)
                 //                print(self.bookinfo.title)
@@ -55,7 +55,37 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             
         }
     }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 获取输入的文本，移除向输入框中粘贴文本时，系统自动加上的空格（iOS11上有该问题）
+        let new = string.replacingOccurrences(of: " ", with: "")
+        // 获取编辑前的文本
+        var old = NSString(string: textField.text ?? "")
+        // 获取编辑后的文本
+        old = old.replacingCharacters(in: range, with: new) as NSString
+        // 获取数字的字符集
+        let number = CharacterSet(charactersIn: "0123456789")
+        // 判断编辑后的文本是否全为数字
+        if old.rangeOfCharacter(from: number.inverted).location == NSNotFound {
+            // number.inverted表示除了number中包含的字符以外的其他全部字符
+            // 如果old中不包含其他字符，则格式正确
+            // 允许本次编辑
+            textField.text = old as String
+            // 移动光标的位置
+            DispatchQueue.main.async {
+                let beginning = textField.beginningOfDocument
+                let position = textField.position(from: beginning, offset: range.location + new.count)!
+                textField.selectedTextRange = textField.textRange(from: position, to: position)
+            }
+        }
+        return false
+    }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        searchbar.resignFirstResponder()
+        
+        booksearch(isbn: searchbar.text!)
+        return true
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return  (bookinfo.title?.count)!
     }
@@ -65,7 +95,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         let imageurl = URL(string:bookinfo.image![indexPath.row])
         cell.bookimage.kf.setImage(with: imageurl)
         cell.bookname.text = bookinfo.title![indexPath.row]
-        print(imageurl)
+        //print(imageurl)
         return cell
         
     }
@@ -89,7 +119,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         if bookinfo.image == nil {
             bookinfo.image = Array<String>()
         }
-        bookinfo.page = UserDefaults.standard.value(forKey: "bookinfo.image") as! Array<String>?
+        bookinfo.page = UserDefaults.standard.value(forKey: "bookinfo.page") as! Array<String>?
         if bookinfo.page == nil {
             bookinfo.page = Array<String>()
         }
@@ -125,9 +155,9 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         if bookinfo.ratingAverage == nil {
             bookinfo.ratingAverage = Array<String>()
         }
-        bookinfo.id = UserDefaults.standard.value(forKey: "bookinfo.author") as! Array<String>?
-        if bookinfo.id == nil {
-            bookinfo.id = Array<String>()
+        bookinfo.author = UserDefaults.standard.value(forKey: "bookinfo.author") as! Array<String>?
+        if bookinfo.author == nil {
+            bookinfo.author = Array<String>()
         }
         bookinfo.url = UserDefaults.standard.value(forKey: "bookinfo.url") as! Array<String>?
         if bookinfo.url == nil {
@@ -136,6 +166,10 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         bookinfo.author_intro = UserDefaults.standard.value(forKey: "bookinfo.author_intro") as! Array<String>?
         if bookinfo.author_intro == nil {
             bookinfo.author_intro = Array<String>()
+        }
+        bookinfo.id = UserDefaults.standard.value(forKey: "bookinfo.id") as! Array<String>?
+        if bookinfo.id == nil {
+            bookinfo.id = Array<String>()
         }
         bookinfo.binding = UserDefaults.standard.value(forKey: "bookinfo.binding") as! Array<String>?
         if bookinfo.binding == nil {
@@ -173,9 +207,16 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     func booklist(book : JSON){
         bookdic()
         if bookinfo.title?.contains(book["title"].string!) == false {
+            var author = ""
             bookinfo.alt?.append(book["alt"].string!)
-            bookinfo.alt_title?.append(book["alt_title"].string!)
-            bookinfo.author?.append(book["author"].string!)
+            bookinfo.alt_title?.append(book["alt_title"].stringValue)
+            var ts = book["author"].arrayObject as! Array<String>
+            for i in ts {
+                self.s1 = self.s1 + "/" + i
+            }
+            s1 = String(s1.dropFirst())
+            bookinfo.author?.append(s1)
+            s1.removeAll()
             bookinfo.author_intro?.append(book["author_intro"].string!)
             bookinfo.binding?.append(book["binding"].string!)
             bookinfo.catalog?.append(book["catalog"].string!)
