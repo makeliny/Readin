@@ -5,4 +5,5 @@ pod 'Alamofire'
 pod 'SwiftyJSON'
 pod 'Chrysan'
 pod 'Kingfisher'
+pod 'NewPopMenu'
 end

@@ -11,27 +11,35 @@ import Alamofire
 import SwiftyJSON
 import Chrysan
 import Kingfisher
+import PopMenu
 class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
     
     
+    @IBOutlet weak var aButton: UIButton!
     @IBOutlet weak var searchbar: UITextField!
     var s1 = ""
     @IBOutlet weak var tableView: UITableView!
     var bookinfo = BookInfo()
     var booke = ""
     override func viewDidLoad() {
-        
+        let item = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        self.navigationItem.backBarButtonItem = item
+      
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationItem.largeTitleDisplayMode = .never
         bookdic()
+        
+        
         let isbn = "9787301298862"
-        booksearch(isbn: isbn)
+        //booksearch(isbn: isbn)
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
-    
+   
     func booksearch(isbn:String){
         //输入isbn,想豆瓣服务器查询，先确isbn是否正确，如果错误就弹出提示框，正确就把返回的JSON存储到字典里。
         //等下次用户再查询isbn，把原来存储的书籍标题拿出来，检查返回的标题是否在已经存储的字典里，如果在就弹提示框取消存储，如果不在就添加。
-        Alamofire.request("https://api.douban.com/v2/book/isbn/\(isbn)").responseJSON { (response) in
+        Alamofire.request("https://api.douban.com/v2/book/isbn/:\(isbn)").responseJSON { (response) in
             
             if response.result.isSuccess {
                 print("成功获取到数据")
@@ -55,30 +63,30 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             
         }
     }
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        // 获取输入的文本，移除向输入框中粘贴文本时，系统自动加上的空格（iOS11上有该问题）
-        let new = string.replacingOccurrences(of: " ", with: "")
-        // 获取编辑前的文本
-        var old = NSString(string: textField.text ?? "")
-        // 获取编辑后的文本
-        old = old.replacingCharacters(in: range, with: new) as NSString
-        // 获取数字的字符集
-        let number = CharacterSet(charactersIn: "0123456789")
-        // 判断编辑后的文本是否全为数字
-        if old.rangeOfCharacter(from: number.inverted).location == NSNotFound {
-            // number.inverted表示除了number中包含的字符以外的其他全部字符
-            // 如果old中不包含其他字符，则格式正确
-            // 允许本次编辑
-            textField.text = old as String
-            // 移动光标的位置
-            DispatchQueue.main.async {
-                let beginning = textField.beginningOfDocument
-                let position = textField.position(from: beginning, offset: range.location + new.count)!
-                textField.selectedTextRange = textField.textRange(from: position, to: position)
-            }
-        }
-        return false
-    }
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        // 获取输入的文本，移除向输入框中粘贴文本时，系统自动加上的空格（iOS11上有该问题）
+//        let new = string.replacingOccurrences(of: " ", with: "")
+//        // 获取编辑前的文本
+//        var old = NSString(string: textField.text ?? "")
+//        // 获取编辑后的文本
+//        old = old.replacingCharacters(in: range, with: new) as NSString
+//        // 获取数字的字符集
+//        let number = CharacterSet(charactersIn: "0123456789")
+//        // 判断编辑后的文本是否全为数字
+//        if old.rangeOfCharacter(from: number.inverted).location == NSNotFound {
+//            // number.inverted表示除了number中包含的字符以外的其他全部字符
+//            // 如果old中不包含其他字符，则格式正确
+//            // 允许本次编辑
+//            textField.text = old as String
+//            // 移动光标的位置
+//            DispatchQueue.main.async {
+//                let beginning = textField.beginningOfDocument
+//                let position = textField.position(from: beginning, offset: range.location + new.count)!
+//                textField.selectedTextRange = textField.textRange(from: position, to: position)
+//            }
+//        }
+//        return false
+//    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchbar.resignFirstResponder()
@@ -92,9 +100,11 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! Cell
-        let imageurl = URL(string:bookinfo.image![indexPath.row])
+        let imageurl = URL(string:bookinfo.imagesSmall![indexPath.row])
         cell.bookimage.kf.setImage(with: imageurl)
         cell.bookname.text = bookinfo.title![indexPath.row]
+        cell.bookauthor.text = bookinfo.author![indexPath.row]
+        cell.rating.text = bookinfo.ratingAverage![indexPath.row]
         //print(imageurl)
         return cell
         
@@ -102,7 +112,86 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath[1])
     }
-    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let more = UIContextualAction(style: .normal, title: "更多") {
+            (action, view, completionHandler) in
+            print("more")
+            completionHandler(true)
+        }
+        more.backgroundColor = .lightGray
+        
+        //创建“旗标”事件按钮
+//        let favorite = UIContextualAction(style: .normal, title: "旗标") {
+//            (action, view, completionHandler) in
+//            UIAlertController.showAlert(message: "点击了“旗标”按钮")
+//            completionHandler(true)
+//        }
+//        favorite.backgroundColor = .orange
+        
+        
+        //创建“删除”事件按钮
+        let delete = UIContextualAction(style: .destructive, title: "删除") {
+            (action, view, completionHandler) in
+            //将对应条目的数据删除
+            
+            self.bookinfo.alt?.remove(at: indexPath.row)
+            self.bookinfo.alt_title?.remove(at: indexPath.row)
+            self.bookinfo.author?.remove(at: indexPath.row)
+            self.bookinfo.author_intro?.remove(at: indexPath.row)
+            self.bookinfo.binding?.remove(at: indexPath.row)
+            self.bookinfo.catalog?.remove(at: indexPath.row)
+            self.bookinfo.id?.remove(at: indexPath.row)
+            self.bookinfo.image?.remove(at: indexPath.row)
+            self.bookinfo.imagesSmall?.remove(at: indexPath.row)
+            self.bookinfo.imagesMedium?.remove(at: indexPath.row)
+            self.bookinfo.imagesLarge?.remove(at: indexPath.row)
+            self.bookinfo.isbn10?.remove(at: indexPath.row)
+            self.bookinfo.isbn13?.remove(at: indexPath.row)
+            self.bookinfo.origin_title?.remove(at: indexPath.row)
+            self.bookinfo.page?.remove(at: indexPath.row)
+            self.bookinfo.price?.remove(at: indexPath.row)
+            self.bookinfo.pubdate?.remove(at: indexPath.row)
+            self.bookinfo.publisher?.remove(at: indexPath.row)
+            self.bookinfo.ratingAverage?.remove(at: indexPath.row)
+            self.bookinfo.ratingNumRaters?.remove(at: indexPath.row)
+            self.bookinfo.subtitle?.remove(at: indexPath.row)
+            self.bookinfo.summary?.remove(at: indexPath.row)
+            self.bookinfo.title?.remove(at: indexPath.row)
+            self.bookinfo.url?.remove(at: indexPath.row)
+            
+            UserDefaults.standard.set(self.bookinfo.alt, forKey: "bookinfo.alt")
+            UserDefaults.standard.set(self.bookinfo.author_intro, forKey: "bookinfo.author_intro")
+            UserDefaults.standard.set(self.bookinfo.author, forKey: "bookinfo.author")
+            UserDefaults.standard.set(self.bookinfo.alt_title, forKey: "bookinfo.alt_title")
+            UserDefaults.standard.set(self.bookinfo.binding, forKey: "bookinfo.binding")
+            UserDefaults.standard.set(self.bookinfo.catalog, forKey: "bookinfo.catalog")
+            UserDefaults.standard.set(self.bookinfo.id, forKey: "bookinfo.id")
+            UserDefaults.standard.set(self.bookinfo.image, forKey: "bookinfo.image")
+            UserDefaults.standard.set(self.bookinfo.imagesLarge, forKey: "bookinfo.imagesLarge")
+            UserDefaults.standard.set(self.bookinfo.imagesMedium, forKey: "bookinfo.imagesMedium")
+            UserDefaults.standard.set(self.bookinfo.imagesSmall, forKey: "bookinfo.imagesSmall")
+            UserDefaults.standard.set(self.bookinfo.isbn10, forKey: "bookinfo.isbn10")
+            UserDefaults.standard.set(self.bookinfo.isbn13, forKey: "bookinfo.isbn13")
+            UserDefaults.standard.set(self.bookinfo.origin_title, forKey: "bookinfo.origin_title")
+            UserDefaults.standard.set(self.bookinfo.page, forKey: "bookinfo.page")
+            UserDefaults.standard.set(self.bookinfo.price, forKey: "bookinfo.price")
+            UserDefaults.standard.set(self.bookinfo.pubdate, forKey: "bookinfo.pubdate")
+            UserDefaults.standard.set(self.bookinfo.publisher, forKey: "bookinfo.publisher")
+            UserDefaults.standard.set(self.bookinfo.ratingAverage, forKey: "bookinfo.ratingAverage")
+            UserDefaults.standard.set(self.bookinfo.ratingNumRaters, forKey: "bookinfo.ratingNumRaters")
+            UserDefaults.standard.set(self.bookinfo.summary, forKey: "bookinfo.summary")
+            UserDefaults.standard.set(self.bookinfo.subtitle, forKey: "bookinfo.subtitle")
+            UserDefaults.standard.set(self.bookinfo.title, forKey: "bookinfo.title")
+            UserDefaults.standard.set(self.bookinfo.url, forKey: "bookinfo.url")
+            UserDefaults.standard.synchronize()
+            
+            completionHandler(true)
+        }
+        
+        //返回所有的事件按钮
+        let configuration = UISwipeActionsConfiguration(actions: [delete, more])
+        return configuration
+    }
     
     
     
@@ -203,6 +292,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         if bookinfo.subtitle == nil {
             bookinfo.subtitle = Array<String>()
         }
+        
     }
     func booklist(book : JSON){
         bookdic()
@@ -273,9 +363,10 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "bookview"{
         let row = tableView.indexPathForSelectedRow?.row
         let bv = segue.destination as! bookview
-        bv.index = row!
+            bv.index = row!}
 
     }
     

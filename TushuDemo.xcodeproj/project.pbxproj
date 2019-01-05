@@ -7,10 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B23535721D852E300B8E986 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B23535621D852E300B8E986 /* TableViewController.swift */; };
 		6B8CFCBF21D1F2340068D12F /* BookInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8CFCBE21D1F2340068D12F /* BookInfo.swift */; };
 		6B8CFCC321D3BE8F0068D12F /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8CFCC221D3BE8F0068D12F /* Cell.swift */; };
 		6B8CFCC721D4685B0068D12F /* bookview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8CFCC621D4685B0068D12F /* bookview.swift */; };
 		6B8CFCC921D5BE2C0068D12F /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8CFCC821D5BE2C0068D12F /* UIView.swift */; };
+		6BA7F15221D9A10800EB1BA8 /* booksub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA7F15121D9A10800EB1BA8 /* booksub.swift */; };
+		6BA7F15621DC962200EB1BA8 /* text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA7F15521DC962200EB1BA8 /* text.swift */; };
+		6BA7F15A21DC996A00EB1BA8 /* Sell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA7F15921DC996A00EB1BA8 /* Sell.swift */; };
+		6BA7F15E21DC9BCB00EB1BA8 /* searchcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA7F15D21DC9BCB00EB1BA8 /* searchcell.swift */; };
+		6BA7F16021DCBEAE00EB1BA8 /* Searchview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA7F15F21DCBEAE00EB1BA8 /* Searchview.swift */; };
 		6BDDA9C321D1BAC400CA9819 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BDDA9C221D1BAC400CA9819 /* AppDelegate.swift */; };
 		6BDDA9C521D1BAC400CA9819 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BDDA9C421D1BAC400CA9819 /* ViewController.swift */; };
 		6BDDA9C821D1BAC400CA9819 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BDDA9C621D1BAC400CA9819 /* Main.storyboard */; };
@@ -22,11 +28,17 @@
 /* Begin PBXFileReference section */
 		64619F30FC7732A1DE7E2964 /* Pods-TushuDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TushuDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-TushuDemo/Pods-TushuDemo.release.xcconfig"; sourceTree = "<group>"; };
 		678DC97E3B5A9DF335E79EF9 /* Pods-TushuDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TushuDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TushuDemo/Pods-TushuDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		6B23535621D852E300B8E986 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		6B8CFCBE21D1F2340068D12F /* BookInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookInfo.swift; sourceTree = "<group>"; };
 		6B8CFCC121D321590068D12F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		6B8CFCC221D3BE8F0068D12F /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		6B8CFCC621D4685B0068D12F /* bookview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bookview.swift; sourceTree = "<group>"; };
 		6B8CFCC821D5BE2C0068D12F /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		6BA7F15121D9A10800EB1BA8 /* booksub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = booksub.swift; sourceTree = "<group>"; };
+		6BA7F15521DC962200EB1BA8 /* text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = text.swift; sourceTree = "<group>"; };
+		6BA7F15921DC996A00EB1BA8 /* Sell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sell.swift; sourceTree = "<group>"; };
+		6BA7F15D21DC9BCB00EB1BA8 /* searchcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searchcell.swift; sourceTree = "<group>"; };
+		6BA7F15F21DCBEAE00EB1BA8 /* Searchview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Searchview.swift; sourceTree = "<group>"; };
 		6BDDA9BF21D1BAC400CA9819 /* TushuDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TushuDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BDDA9C221D1BAC400CA9819 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6BDDA9C421D1BAC400CA9819 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -73,8 +85,14 @@
 				6BDDA9C221D1BAC400CA9819 /* AppDelegate.swift */,
 				6BDDA9C421D1BAC400CA9819 /* ViewController.swift */,
 				6B8CFCC221D3BE8F0068D12F /* Cell.swift */,
+				6B23535621D852E300B8E986 /* TableViewController.swift */,
+				6BA7F15921DC996A00EB1BA8 /* Sell.swift */,
 				6BDDA9C621D1BAC400CA9819 /* Main.storyboard */,
+				6BA7F15F21DCBEAE00EB1BA8 /* Searchview.swift */,
+				6BA7F15D21DC9BCB00EB1BA8 /* searchcell.swift */,
+				6BA7F15121D9A10800EB1BA8 /* booksub.swift */,
 				6B8CFCC821D5BE2C0068D12F /* UIView.swift */,
+				6BA7F15521DC962200EB1BA8 /* text.swift */,
 				6B8CFCC621D4685B0068D12F /* bookview.swift */,
 				6B8CFCC121D321590068D12F /* README.md */,
 				6B8CFCBE21D1F2340068D12F /* BookInfo.swift */,
@@ -205,6 +223,7 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Chrysan/Chrysan.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/NewPopMenu/PopMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -214,6 +233,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Chrysan.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PopMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -229,10 +249,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BDDA9C521D1BAC400CA9819 /* ViewController.swift in Sources */,
+				6B23535721D852E300B8E986 /* TableViewController.swift in Sources */,
 				6B8CFCC721D4685B0068D12F /* bookview.swift in Sources */,
 				6B8CFCC321D3BE8F0068D12F /* Cell.swift in Sources */,
+				6BA7F16021DCBEAE00EB1BA8 /* Searchview.swift in Sources */,
+				6BA7F15621DC962200EB1BA8 /* text.swift in Sources */,
 				6B8CFCBF21D1F2340068D12F /* BookInfo.swift in Sources */,
+				6BA7F15221D9A10800EB1BA8 /* booksub.swift in Sources */,
+				6BA7F15A21DC996A00EB1BA8 /* Sell.swift in Sources */,
 				6B8CFCC921D5BE2C0068D12F /* UIView.swift in Sources */,
+				6BA7F15E21DC9BCB00EB1BA8 /* searchcell.swift in Sources */,
 				6BDDA9C321D1BAC400CA9819 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

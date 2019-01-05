@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import SwiftyJSON
 
-class bookview: UIViewController,UITextFieldDelegate {
+class bookview: UIViewController,UITextFieldDelegate,UIScrollViewDelegate {
     let bookinfo = BookInfo()
     var index = Int()
     
@@ -24,9 +24,11 @@ class bookview: UIViewController,UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
     navigationItem.largeTitleDisplayMode = .never
         bookdic()
-        bkname.font = UIFont.systemFont(ofSize: 20, weight: .light)
+//        bkname.font = UIFont.systemFont(ofSize: 20, weight: .light)
         
 
         bkauthor.text = bookinfo.author![index]

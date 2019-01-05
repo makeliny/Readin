@@ -2,12 +2,14 @@ PODS:
   - Alamofire (4.7.3)
   - Chrysan (1.3.0)
   - Kingfisher (4.8.1)
+  - NewPopMenu (1.1.2)
   - SwiftyJSON (4.1.0)
 
 DEPENDENCIES:
   - Alamofire
   - Chrysan
   - Kingfisher
+  - NewPopMenu
   - SwiftyJSON
 
 SPEC REPOS:
@@ -15,14 +17,16 @@ SPEC REPOS:
     - Alamofire
     - Chrysan
     - Kingfisher
+    - NewPopMenu
     - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Chrysan: 857ab6f5227a570644f19d82b92e0418f535acab
   Kingfisher: 868c1149679a7ab6869be118faa9b5aed154aaf0
+  NewPopMenu: 42c2fbd46c7fcb7d7c1c3289c8675afd1877ffc8
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
 
-PODFILE CHECKSUM: bbac5225b7ed61109ad9e1d30880435f80900b52
+PODFILE CHECKSUM: 1b13e8fbf1be3ae01a01c592e03bf7fec9905af0
 
 COCOAPODS: 1.5.3
