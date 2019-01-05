@@ -12,27 +12,35 @@ import SwiftyJSON
 import Chrysan
 import Kingfisher
 import PopMenu
+import ViewAnimator
 class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
     
     
     @IBOutlet weak var aButton: UIButton!
     @IBOutlet weak var searchbar: UITextField!
     var s1 = ""
+    var tbint = 1
     @IBOutlet weak var tableView: UITableView!
     var bookinfo = BookInfo()
     var booke = ""
     override func viewDidLoad() {
         let item = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         self.navigationItem.backBarButtonItem = item
-      
+        
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationItem.largeTitleDisplayMode = .never
         bookdic()
-        
-        
+        UIView.animate(views: tableView.visibleCells, animations: animations, completion: {
+            print("wanc")
+        })
+
+//        UIView.animate(views: tableView.visibleCells,
+//                       animations: [fromAnimation, zoomAnimation],
+//                       delay: 0.5)
         let isbn = "9787301298862"
         //booksearch(isbn: isbn)
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
    
@@ -105,6 +113,11 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         cell.bookname.text = bookinfo.title![indexPath.row]
         cell.bookauthor.text = bookinfo.author![indexPath.row]
         cell.rating.text = bookinfo.ratingAverage![indexPath.row]
+        let cells = tableView.visibleCells(in: 1)
+        let fromAnimation = AnimationType.from(direction: .right, offset: 30.0)
+        let zoomAnimation = AnimationType.zoom(scale: 0.2)
+        let rotateAnimation = AnimationType.rotate(angle: CGFloat.pi/6)
+        UIView.animate(views: cells, animations: [rotateAnimation, fromAnimation])
         //print(imageurl)
         return cell
         
@@ -369,8 +382,37 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             bv.index = row!}
 
     }
-    
+    private let animations = [AnimationType.from(direction: .bottom, offset: 30.0)]
+    func wanc(){
+        let fromAnimation = AnimationType.from(direction: .right, offset: 30.0)
+        let zoomAnimation = AnimationType.zoom(scale: 0.2)
+        let rotateAnimation = AnimationType.rotate(angle: CGFloat.pi/6)
+        UIView.animate(views: tableView.visibleCells,
+                       animations: [fromAnimation, zoomAnimation], delay: 0.5)
+        
+        //self.tableView.reloadData()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        bookdic()
+        tableView.reloadData()
+        wanc()
+        print("wancheng")
+    }
 
+
+    override func viewDidAppear(_ animated: Bool) {
+//        bookdic()
+//        wanc()
+//        print("wancheng")
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        //bookinfo.title?.removeAll()
+        tableView.reloadData()
+    }
+
+    @IBAction func re(_ sender: UIButton) {
+        tableView.reloadData()
+    }
     
 }
 

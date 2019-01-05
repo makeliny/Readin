@@ -6,4 +6,5 @@ pod 'SwiftyJSON'
 pod 'Chrysan'
 pod 'Kingfisher'
 pod 'NewPopMenu'
+pod "ViewAnimator"
 end

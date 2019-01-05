@@ -4,6 +4,7 @@ PODS:
   - Kingfisher (4.8.1)
   - NewPopMenu (1.1.2)
   - SwiftyJSON (4.1.0)
+  - ViewAnimator (2.1.2)
 
 DEPENDENCIES:
   - Alamofire
@@ -11,6 +12,7 @@ DEPENDENCIES:
   - Kingfisher
   - NewPopMenu
   - SwiftyJSON
+  - ViewAnimator
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -19,6 +21,7 @@ SPEC REPOS:
     - Kingfisher
     - NewPopMenu
     - SwiftyJSON
+    - ViewAnimator
 
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
@@ -26,7 +29,8 @@ SPEC CHECKSUMS:
   Kingfisher: 868c1149679a7ab6869be118faa9b5aed154aaf0
   NewPopMenu: 42c2fbd46c7fcb7d7c1c3289c8675afd1877ffc8
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
+  ViewAnimator: 20df9a24a076c6ee78b77a4dbf1943808c94954e
 
-PODFILE CHECKSUM: 1b13e8fbf1be3ae01a01c592e03bf7fec9905af0
+PODFILE CHECKSUM: 348138b7c51db3bce19cc2c066dc67e4c244a300
 
 COCOAPODS: 1.5.3
