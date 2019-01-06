@@ -122,6 +122,12 @@ final public class PopMenuViewController: UIViewController {
     
     // MARK: - View Life Cycle
     
+    /// PopMenuViewController constructor
+    ///
+    /// - Parameters:
+    ///   - sourceView: the source view for triggering the menu
+    ///   - actions: all the menu actions
+    ///   - appearance: appearance configuration
     public convenience init(sourceView: AnyObject? = nil, actions: [PopMenuAction], appearance: PopMenuAppearance? = nil) {
         self.init(nibName: nil, bundle: nil)
         
@@ -195,6 +201,21 @@ final public class PopMenuViewController: UIViewController {
         }
         
         return .lightContent
+    }
+    
+    /// Handle when device orientation changed or container size changed.
+    ///
+    /// - Parameters:
+    ///   - size: Changed size
+    ///   - coordinator: Coordinator that manages the container
+    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { context in
+            self.configureBackgroundView()
+            self.contentFrame = self.calculateContentFittingFrame()
+            self.setupContentConstraints()
+        })
+        
+        super.viewWillTransition(to: size, with: coordinator)
     }
     
 }
@@ -306,7 +327,17 @@ extension PopMenuViewController {
     ///
     /// - Returns: The fitting frame
     fileprivate func calculateContentFittingFrame() -> CGRect {
-        let size = CGSize(width: calculateContentWidth(), height: CGFloat(actions.count) * appearance.popMenuActionHeight)
+        var height: CGFloat
+        
+        if actions.count >= appearance.popMenuActionCountForScrollable {
+            // Make scroll view
+            height = CGFloat(appearance.popMenuActionCountForScrollable) * appearance.popMenuActionHeight
+            height -= 20
+        } else {
+            height = CGFloat(actions.count) * appearance.popMenuActionHeight
+        }
+        
+        let size = CGSize(width: calculateContentWidth(), height: height)
         let origin = calculateContentOrigin(with: size)
         
         return CGRect(origin: origin, size: size)
@@ -317,10 +348,18 @@ extension PopMenuViewController {
     /// - Returns: The source origin point
     fileprivate func calculateContentOrigin(with size: CGSize) -> CGPoint {
         guard let sourceFrame = absoluteSourceFrame else { return CGPoint(x: view.center.x - size.width / 2, y: view.center.y - size.height / 2) }
+        let minContentPos: CGFloat = UIScreen.main.bounds.size.width * 0.05
+        let maxContentPos: CGFloat = UIScreen.main.bounds.size.width * 0.95
         
         // Get desired content origin point
         let offsetX = (size.width - sourceFrame.size.width ) / 2
         var desiredOrigin = CGPoint(x: sourceFrame.origin.x - offsetX, y: sourceFrame.origin.y)
+        if (desiredOrigin.x + size.width) > maxContentPos {
+            desiredOrigin.x = maxContentPos - size.width
+        }
+        if desiredOrigin.x < minContentPos {
+            desiredOrigin.x = minContentPos
+        }
         
         // Move content in place
         translateOverflowX(desiredOrigin: &desiredOrigin, contentSize: size)
@@ -379,7 +418,6 @@ extension PopMenuViewController {
     /// - Returns: The fitting width for content
     fileprivate func calculateContentWidth() -> CGFloat {
         var contentFitWidth: CGFloat = 0
-        contentFitWidth += PopMenuDefaultAction.iconWidthHeight
         contentFitWidth += PopMenuDefaultAction.textLeftPadding * 2
         
         // Calculate the widest width from action titles to determine the width
@@ -391,16 +429,16 @@ extension PopMenuViewController {
             sizingLabel.text = action.title
             
             let desiredWidth = sizingLabel.sizeThatFits(view.bounds.size).width
-            contentFitWidth += min(desiredWidth, maxContentWidth)
+            contentFitWidth += desiredWidth
+            
+            contentFitWidth += action.iconWidthHeight
         }
         
-        return contentFitWidth
+        return min(contentFitWidth,maxContentWidth)
     }
     
     /// Setup actions view.
     fileprivate func configureActionsView() {
-        actionsView.addGestureRecognizer(panGestureForMenu)
-        
         actionsView.translatesAutoresizingMaskIntoConstraints = false
         actionsView.axis = .vertical
         actionsView.alignment = .fill
@@ -426,14 +464,45 @@ extension PopMenuViewController {
             actionsView.addArrangedSubview(action.view)
         }
         
-        contentView.addSubview(actionsView)
-        
-        NSLayoutConstraint.activate([
-            actionsView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            actionsView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            actionsView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
-            actionsView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4)
-        ])
+        // Check add scroll view or not
+        if actions.count >= (appearance.popMenuActionCountForScrollable) {
+            // Scrollable actions
+            let scrollView = UIScrollView()
+            scrollView.translatesAutoresizingMaskIntoConstraints = false
+            scrollView.showsHorizontalScrollIndicator = false
+            scrollView.showsVerticalScrollIndicator = !appearance.popMenuScrollIndicatorHidden
+            scrollView.indicatorStyle = appearance.popMenuScrollIndicatorStyle
+            scrollView.contentSize.height = appearance.popMenuActionHeight * CGFloat(actions.count)
+            
+            scrollView.addSubview(actionsView)
+            contentView.addSubview(scrollView)
+            
+            NSLayoutConstraint.activate([
+                scrollView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+                scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                scrollView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+                scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            ])
+            
+            NSLayoutConstraint.activate([
+                actionsView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+                actionsView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+                actionsView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                actionsView.heightAnchor.constraint(equalToConstant: scrollView.contentSize.height)
+            ])
+        } else {
+            // Not scrollable
+            actionsView.addGestureRecognizer(panGestureForMenu)
+            
+            contentView.addSubview(actionsView)
+            
+            NSLayoutConstraint.activate([
+                actionsView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+                actionsView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+                actionsView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+                actionsView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4)
+            ])
+        }
     }
     
     /// Add separator view for the given action view.
@@ -548,7 +617,9 @@ extension PopMenuViewController {
         
         if shouldEnableHaptics {
             // Generate haptics
-            Haptic.impact(.medium).generate()
+            if #available(iOS 10.0, *) {
+                Haptic.impact(.medium).generate()
+            }
         }
         
         // Notify delegate

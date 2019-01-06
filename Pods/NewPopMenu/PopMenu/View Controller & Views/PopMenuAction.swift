@@ -33,7 +33,7 @@ import UIKit
     static var iconLeftPadding: CGFloat { get }
     
     /// Icon sizing.
-    static var iconWidthHeight: CGFloat { get }
+    var iconWidthHeight: CGFloat { get set }
     
     /// The color to set for both label and icon.
     var tintColor: UIColor { get set }
@@ -67,6 +67,9 @@ public class PopMenuDefaultAction: NSObject, PopMenuAction {
     /// Icon of action.
     public let image: UIImage?
     
+    /// Image rendering option.
+    public var imageRenderingMode: UIImage.RenderingMode = .alwaysTemplate
+    
     /// Renderred view of action.
     public let view: UIView
     
@@ -75,6 +78,9 @@ public class PopMenuDefaultAction: NSObject, PopMenuAction {
     
     /// Handler of action when selected.
     public let didSelect: PopMenuActionHandler?
+    
+    /// Icon sizing.
+    public var iconWidthHeight: CGFloat = 27
     
     // MARK: - Computed Properties
     
@@ -138,7 +144,7 @@ public class PopMenuDefaultAction: NSObject, PopMenuAction {
     private lazy var iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = image?.withRenderingMode(.alwaysTemplate)
+        imageView.image = image?.withRenderingMode(imageRenderingMode)
         
         return imageView
     }()
@@ -147,7 +153,6 @@ public class PopMenuDefaultAction: NSObject, PopMenuAction {
     
     public static let textLeftPadding: CGFloat = 25
     public static let iconLeftPadding: CGFloat = 18
-    public static let iconWidthHeight: CGFloat = 27
     
     // MARK: - Initializer
     
@@ -170,7 +175,7 @@ public class PopMenuDefaultAction: NSObject, PopMenuAction {
             view.addSubview(iconImageView)
             
             NSLayoutConstraint.activate([
-                iconImageView.widthAnchor.constraint(equalToConstant: PopMenuDefaultAction.iconWidthHeight),
+                iconImageView.widthAnchor.constraint(equalToConstant: iconWidthHeight),
                 iconImageView.heightAnchor.constraint(equalTo: iconImageView.widthAnchor),
                 iconImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: PopMenuDefaultAction.iconLeftPadding),
                 iconImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -198,7 +203,7 @@ public class PopMenuDefaultAction: NSObject, PopMenuAction {
     /// unhighlight the view when pan gesture left.
     public func highlightActionView(_ highlight: Bool) {
         DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.26, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 9, options: self.highlighted ? .curveEaseIn : .curveEaseOut, animations: {
+            UIView.animate(withDuration: 0.26, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 9, options: self.highlighted ? UIView.AnimationOptions.curveEaseIn : UIView.AnimationOptions.curveEaseOut, animations: {
                 self.view.transform = self.highlighted ? CGAffineTransform.identity.scaledBy(x: 1.09, y: 1.09) : .identity
                 self.view.backgroundColor = self.highlighted ? self.backgroundColor.withAlphaComponent(0.25) : .clear
             }, completion: nil)
@@ -217,13 +222,11 @@ public class PopMenuDefaultAction: NSObject, PopMenuAction {
             UIView.animate(withDuration: 0.175, animations: {
                 self.view.transform = CGAffineTransform.identity.scaledBy(x: 0.915, y: 0.915)
                 self.view.backgroundColor = self.backgroundColor.withAlphaComponent(0.18)
-            }, completion: {
-                if $0 {
-                    UIView.animate(withDuration: 0.175, animations: {
-                        self.view.transform = .identity
-                        self.view.backgroundColor = .clear
-                    })
-                }
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.175, animations: {
+                    self.view.transform = .identity
+                    self.view.backgroundColor = .clear
+                })
             })
         }
     }

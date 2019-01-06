@@ -33,11 +33,23 @@ final public class PopMenuAppearance: NSObject {
     /// How tall each action is.
     public var popMenuActionHeight: CGFloat = 50
     
+    /// How many actions are the breakpoint to trigger scrollable.
+    public var popMenuActionCountForScrollable: UInt = 6
+
+    /// The scroll indicator style when the actions are scrollable.
+    public var popMenuScrollIndicatorStyle: UIScrollView.IndicatorStyle = .white
+    
+    /// Hide the scroll indicator or not when the actions are scrollable.
+    public var popMenuScrollIndicatorHidden = false
+    
     /// The separator style for each action.
     public var popMenuItemSeparator: PopMenuActionSeparator = .none()
 
     /// The status bar style of the pop menu.
     public var popMenuStatusBarStyle: UIStatusBarStyle?
+    
+    /// The presentation style
+    public var popMenuPresentationStyle: PopMenuPresentationStyle = .cover()
 
 }
 
@@ -61,7 +73,7 @@ public struct PopMenuBackgroundStyle {
     public let isBlurred: Bool?
     
     /// If blurred, store the blur style.
-    public let blurStyle: UIBlurEffectStyle?
+    public let blurStyle: UIBlurEffect.Style?
     
     // MARK: - Initializers
     
@@ -71,7 +83,7 @@ public struct PopMenuBackgroundStyle {
     }
     
     /// Quick setter for blurred mode.
-    public static func blurred(_ style: UIBlurEffectStyle) -> PopMenuBackgroundStyle{
+    public static func blurred(_ style: UIBlurEffect.Style) -> PopMenuBackgroundStyle{
         return PopMenuBackgroundStyle(isDimmed: nil, dimColor: nil, dimOpacity: nil, isBlurred: true, blurStyle: style)
     }
     
@@ -158,4 +170,32 @@ public struct PopMenuActionSeparator: Equatable {
         return lhs.color == rhs.color && lhs.height == rhs.height
     }
     
+}
+
+///
+public struct PopMenuPresentationStyle {
+    
+    /// The direction enum for the menu.
+    public let direction: PopMenuDirection
+    
+    /// Custom offset coordinates.
+    public let offset: CGPoint?
+    
+    /// The default presentation that covers the source view.
+    public static func cover() -> PopMenuPresentationStyle {
+        return PopMenuPresentationStyle(direction: .none, offset: nil)
+    }
+    
+    /// The custom presentation that shows near the source view in a direction and offset.
+    public static func near(_ direction: PopMenuDirection, offset: CGPoint? = nil) -> PopMenuPresentationStyle {
+        return PopMenuPresentationStyle(direction: direction, offset: offset)
+    }
+}
+
+public enum PopMenuDirection {
+    case top
+    case left
+    case right
+    case bottom
+    case none
 }

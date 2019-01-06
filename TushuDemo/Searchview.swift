@@ -10,7 +10,6 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import Kingfisher
-import ViewAnimator
 class Searchview: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
     @IBOutlet weak var tabelview: UITableView!
     var bookJSON : JSON!
@@ -19,14 +18,7 @@ class Searchview: UIViewController,UITableViewDelegate,UITableViewDataSource,UIT
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 20
     }
-    private let animations = [AnimationType.from(direction: .bottom, offset: 30.0)]
     
-    @IBAction func r(_ sender: UIButton) {
-        tabelview.reloadData()
-        UIView.animate(views: tabelview.visibleCells, animations: animations, completion: {
-            print("wanc")
-        })
-    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "searchcell") as! searchcell
         if bookJSON.isEmpty == false {
@@ -83,10 +75,6 @@ class Searchview: UIViewController,UITableViewDelegate,UITableViewDataSource,UIT
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchbar.resignFirstResponder()
         booksearch(isbn: searchbar.text!)
-        tabelview.reloadData()
-        UIView.animate(views: tabelview.visibleCells, animations: animations, completion: {
-            print("wanc")
-        })
         return true
     }
     
@@ -103,8 +91,6 @@ class Searchview: UIViewController,UITableViewDelegate,UITableViewDataSource,UIT
         let row = tabelview.indexPathForSelectedRow?.row
         let bs = segue.destination as! booksub
         bs.bkimage = bookJSON["books"][row!]["image"].stringValue
-        bs.blkjson = bookJSON
-        bs.bkint = row!
         print(bs.bkimage)
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
