@@ -12,6 +12,9 @@ import SwiftyJSON
 import Chrysan
 import Kingfisher
 import PopMenu
+import Hero
+
+
 class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
     
     
@@ -368,6 +371,21 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         let bv = segue.destination as! bookview
             bv.index = row!}
 
+    }
+    private let animations = [AnimationType.from(direction: .right, offset: 30.0)]
+    func wanc(){
+        let fromAnimation = AnimationType.from(direction: .left, offset: 30.0)
+        let zoomAnimation = AnimationType.zoom(scale: 0.2)
+        let rotateAnimation = AnimationType.rotate(angle: CGFloat.pi/6)
+        UIView.animate(views: tableView.visibleCells,
+                       animations: animations, delay: 0.3)
+        
+        //self.tableView.reloadData()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        bookdic()
+        tableView.reloadData()
+        wanc()
     }
     
 
