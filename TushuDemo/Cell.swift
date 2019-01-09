@@ -12,7 +12,6 @@ class Cell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        bookimage.hero.id = "1"
         // Initialization code
     }
 

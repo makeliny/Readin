@@ -29,7 +29,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         navigationItem.largeTitleDisplayMode = .never
         bookdic()
         
-    
         
         let isbn = "9787301298862"
         //booksearch(isbn: isbn)
